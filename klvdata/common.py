@@ -114,7 +114,12 @@ def linear_map(src_value, src_domain, dst_range):
     # assert(src_min <= src_value <= src_max)
 
     if not (src_min <= src_value <= src_max):
-        raise ValueError
+        # if we have a 32 it NaN - slightly miscoded
+        if src_value == -2147483648:
+            src_value = src_max
+        else:
+            print("{s}, {sv}, {sx}".format(s=src_min, sv=src_value, sx=src_max))
+            raise ValueError
 
     slope = (dst_max - dst_min) / (src_max - src_min)
     dst_value = slope * (src_value - src_min) + dst_min
